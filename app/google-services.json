@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "340810936717",
+    "firebase_url": "https://ideataskdb-default-rtdb.firebaseio.com",
+    "project_id": "ideataskdb",
+    "storage_bucket": "ideataskdb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340810936717:android:c26d0285f4dbb301d58dc4",
+        "android_client_info": {
+          "package_name": "com.woody.digitalnotepad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7uEuqA7pxmJDSkXpASmt100PXNWZMlQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
