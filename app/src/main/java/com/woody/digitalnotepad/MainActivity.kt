@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity(){
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private var recyclerViewChildren = HashMap<Int, Pair<Boolean, String>>()
-    private var isPopUpVisible = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         db = Firebase.firestore
@@ -37,7 +36,6 @@ class MainActivity : AppCompatActivity(){
         auth = Firebase.auth
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
         setButtonListeners()
         val email = "test@email.com"
         val password = "password"
@@ -105,6 +103,9 @@ class MainActivity : AppCompatActivity(){
                 "description" to descTxt.text.toString(),
             )
             createIdea(db, idea)
+            titleTxt.setText("")
+            compOnTxt.setText("")
+            descTxt.setText("")
         }
 
         val createTaskButton: Button = findViewById(R.id.create_task)
@@ -118,6 +119,9 @@ class MainActivity : AppCompatActivity(){
                 "steps" to descTxt.text.toString(),
             )
             createTask(db, task)
+            titleTxt.setText("")
+            compOnTxt.setText("")
+            descTxt.setText("")
         }
     }
 

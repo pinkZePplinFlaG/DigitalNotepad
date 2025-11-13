@@ -7,7 +7,10 @@
     android:layout_marginBottom="25dp"
     android:orientation="vertical"
     android:id="@+id/main_window">
-
+    <include
+        layout="@layout/create_button_bar"/>
+    <include
+        layout="@layout/text_input"/>
     <include
         layout="@layout/show_button_bar"/>
     <androidx.recyclerview.widget.RecyclerView
@@ -15,10 +18,8 @@
         android:layout_height="350dp"
         android:layout_width="match_parent"
         app:layoutManager="LinearLayoutManager" />
-    <include
-        layout="@layout/create_button_bar"/>
-    <include
-        layout="@layout/text_input"/>
+
+
     <include
         layout="@layout/delete_document_button_bar"/>
 </LinearLayout>

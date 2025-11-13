@@ -21,7 +21,7 @@ class RecyclerViewAdapter(val textList: List<String>) :
         fun bind(word: String) {
 
             selectableText.text = word
-            if (!word.contains("Id: "))
+            if (!word.contains("Id: ") || word.contains("userId"))
                 selectableTextCheckBox.visibility = View.GONE
         }
     }
