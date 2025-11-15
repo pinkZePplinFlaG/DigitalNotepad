@@ -20,13 +20,15 @@
                 android:layout_height="match_parent"
                 android:text="Title:"
                 android:layout_margin="10dp"
-                android:textSize="17sp"/>
+                android:textSize="17sp"
+                android:textColor="@color/teal"/>
             <EditText
                 android:id="@+id/create_title_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="15sp"
-                android:autofillHints="@string/title"/>
+                android:autofillHints="@string/title"
+                android:backgroundTint="@color/teal"/>
         </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
@@ -37,13 +39,15 @@
                 android:layout_height="match_parent"
                 android:text="Completed On:"
                 android:layout_margin="10dp"
-                android:textSize="17sp"/>
+                android:textSize="17sp"
+                android:textColor="@color/teal"/>
             <EditText
                 android:id="@+id/create_completed_on_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="15sp"
-                android:autofillHints="@string/title"/>
+                android:autofillHints="@string/title"
+                android:backgroundTint="@color/teal"/>
         </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
@@ -54,14 +58,16 @@
                 android:layout_height="match_parent"
                 android:text="Description:"
                 android:layout_margin="10dp"
-                android:textSize="17sp"/>
+                android:textSize="17sp"
+                android:textColor="@color/teal"/>
             <EditText
                 android:id="@+id/create_description_txt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="15sp"
                 android:autofillHints="@string/title"
-                android:minLines="9"/>
+                android:minLines="9"
+                android:backgroundTint="@color/teal"/>
         </LinearLayout>
     </LinearLayout>
 

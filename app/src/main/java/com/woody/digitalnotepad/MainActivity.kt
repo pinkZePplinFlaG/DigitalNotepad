@@ -31,30 +31,28 @@ class MainActivity : AppCompatActivity(){
     private var recyclerViewChildren = HashMap<Int, Pair<Boolean, String>>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = Firebase.firestore
-        FirebaseApp.initializeApp(this)
-        auth = Firebase.auth
-        enableEdgeToEdge()
+        initializeFirebaseFirestoreDb()
         setContentView(R.layout.activity_main)
-        setButtonListeners()
-        val email = "test@email.com"
-        val password = "password"
-//        createNewUserWithEmailAndPassword(email, password)
-        signInExistingUsers(email, password)
+        //setButtonListeners()
+        signInExistingFirebaseUsers()
+    }
 
+    fun updateTextRecyclerView(messages: Array<String>) {
+        val textRecyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        textRecyclerView.adapter = TextRecyclerViewAdapter(messages.toList())
     }
 
     fun setButtonListeners(){
         val showIdeasButton: Button = findViewById(R.id.show_all_ideas)
         showIdeasButton.setOnClickListener{
             if (userIsSignedIn()) {
-                showIdeas(db)
+                //showIdeas(db)
             }
         }
         val showTasksButton: Button = findViewById(R.id.show_all_tasks)
         showTasksButton.setOnClickListener{
             if (userIsSignedIn()) {
-                showTasks(db)
+                //showTasks(db)
             }
         }
         val deleteTaskButton: Button = findViewById(R.id.delete_task)
@@ -64,11 +62,11 @@ class MainActivity : AppCompatActivity(){
                 for(child in recyclerView.children ){
                     val linLay: LinearLayout = child as LinearLayout
                     val checkbox = linLay.findViewById<CheckBox>(R.id.checkbox)
-                    Log.d(TAG, checkbox.isChecked.toString())
+//                    Log.d(TAG, checkbox.isChecked.toString())
                     if(checkbox.isChecked) {
                         val i: Int = recyclerView.children.indexOf(child)
                         val docId = recyclerViewChildren.get(i)!!.second
-                        deleteDocument(db, "tasks", docId)
+                        //deleteDocument(db, "tasks", docId)
                         break;
                     }
                 }
@@ -81,11 +79,11 @@ class MainActivity : AppCompatActivity(){
                 for(child in recyclerView.children ){
                     val linLay: LinearLayout = child as LinearLayout
                     val checkbox = linLay.findViewById<CheckBox>(R.id.checkbox)
-                    Log.d(TAG, checkbox.isChecked.toString())
+//                    Log.d(TAG, checkbox.isChecked.toString())
                     if(checkbox.isChecked) {
                         val i: Int = recyclerView.children.indexOf(child)
                         val docId = recyclerViewChildren.get(i)!!.second
-                        deleteDocument(db, "ideas", docId)
+                        //deleteDocument(db, "ideas", docId)
                         break;
                     }
                 }
@@ -102,7 +100,7 @@ class MainActivity : AppCompatActivity(){
                 "implemented" to compOnTxt.text.toString(),
                 "description" to descTxt.text.toString(),
             )
-            createIdea(db, idea)
+            //createIdea(db, idea)
             titleTxt.setText("")
             compOnTxt.setText("")
             descTxt.setText("")
@@ -118,118 +116,119 @@ class MainActivity : AppCompatActivity(){
                 "finished" to compOnTxt.text.toString(),
                 "steps" to descTxt.text.toString(),
             )
-            createTask(db, task)
+            //createTask(db, task)
             titleTxt.setText("")
             compOnTxt.setText("")
             descTxt.setText("")
         }
     }
 
-    fun deleteDocument(db: FirebaseFirestore, collectionPath: String, documentId: String){
-        db.collection(collectionPath).document(documentId)
-            .delete()
-            .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot with id: "+ documentId +" successfully deleted!")
-                updateRecyclerView(arrayOf("DocumentSnapshot "+documentId+" successfully deleted!"))
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error deleting document", e)
-                updateRecyclerView(arrayOf("Error deleting document", e.message.toString()))
-            }
-    }
+//    fun deleteDocument(db: FirebaseFirestore, collectionPath: String, documentId: String){
+//        db.collection(collectionPath).document(documentId)
+//            .delete()
+//            .addOnSuccessListener {
+//                Log.d(TAG, "DocumentSnapshot with id: "+ documentId +" successfully deleted!")
+//                updateTextRecyclerView(arrayOf("DocumentSnapshot "+documentId, " successfully deleted!"))
+//            }
+//            .addOnFailureListener { e ->
+//                Log.w(TAG, "Error deleting document", e)
+//                updateTextRecyclerView(arrayOf("Error deleting document", e.message.toString()))
+//            }
+//    }
+//
+//    fun createIdea(db: FirebaseFirestore, idea: HashMap<String, String>): Task<DocumentReference?> {
+//        return db.collection("ideas")
+//            .add(idea)
+//            .addOnSuccessListener { documentReference ->
+//                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+//                updateTextRecyclerView(arrayOf("DocumentSnapshot added ","with ID: ${documentReference.id}"))
+//            }
+//            .addOnFailureListener { e ->
+//                Log.w(TAG, "Error adding document", e)
+//                updateTextRecyclerView(arrayOf("Error adding document", e.message.toString()))
+//            }
+//    }
+//
+//    fun createTask(db: FirebaseFirestore, task: HashMap<String, String>): Task<DocumentReference?> {
+//        return db.collection("tasks")
+//            .add(task)
+//            .addOnSuccessListener { documentReference ->
+//                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+//                updateTextRecyclerView(arrayOf("DocumentSnapshot added","with ID: ${documentReference.id}"))
+//            }
+//            .addOnFailureListener { e ->
+//                Log.w(TAG, "Error adding document", e)
+//                updateTextRecyclerView(arrayOf("Error adding document", e.message.toString()))
+//            }
+//    }
+//
+//    fun showIdeas(db: FirebaseFirestore) {
+//        db.collection("ideas")
+//            .get()
+//            .addOnSuccessListener { result ->
+//                val ideaStrings = ArrayList<String>()
+//                for (document in result) {
+//                    val i: Int = result.indexOf(document)
+//                    recyclerViewChildren.put(i, Pair(false, document.id))
+//                    ideaStrings.add("DocId: " + document.id)
+//                    val title = document.get("title") as String
+//                    recyclerViewChildren.put(i+1, Pair(false, title))
+//                    ideaStrings.add("Title: $title")
+//                    val imp = document.get("implemented") as String
+//                    recyclerViewChildren.put(i+2, Pair(false, imp))
+//                    ideaStrings.add("Implemented: $imp")
+//                    val desc = document.get("description") as String
+//                    recyclerViewChildren.put(i+3, Pair(false, desc))
+//                    ideaStrings.add("Description: $desc\n")
+//                }
+//                updateTextRecyclerView(ideaStrings.toTypedArray())
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.w(TAG, "Error getting documents.", exception)
+//                updateTextRecyclerView( arrayOf(
+//                    "Error getting documents.",
+//                    exception.message.toString()
+//                ))
+//            }
+//    }
 
-    fun createIdea(db: FirebaseFirestore, idea: HashMap<String, String>): Task<DocumentReference?> {
-        return db.collection("ideas")
-            .add(idea)
-            .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                updateRecyclerView(arrayOf("DocumentSnapshot added with ID: ${documentReference.id}"))
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
-                updateRecyclerView(arrayOf("Error adding document", e.message.toString()))
-            }
-    }
+//    fun showTasks(db: FirebaseFirestore) {
+//        db.collection("tasks")
+//            .get()
+//            .addOnSuccessListener { result ->
+//                val taskStrings = ArrayList<String>()
+//                for (document in result) {
+//                    val i: Int = result.indexOf(document)
+//                    val docId = document.id
+//                    recyclerViewChildren.put(i, Pair(false, docId))
+//                    taskStrings.add("DocId: $docId")
+//                    val title = document.get("title") as String
+//                    recyclerViewChildren.put(i+1, Pair(false, title))
+//                    taskStrings.add("Title: $title")
+//                    val fin = document.get("finished") as String
+//                    recyclerViewChildren.put(i+2, Pair(false,fin))
+//                    taskStrings.add("Finished: $fin")
+//                    val steps = document.get("steps") as String
+//                    recyclerViewChildren.put(i+3, Pair(false, steps))
+//                    taskStrings.add("Steps: $steps\n")
+//                }
+//
+//                updateTextRecyclerView(taskStrings.toTypedArray())
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.w(TAG, "Error getting documents.", exception)
+//                updateTextRecyclerView(arrayOf(
+//                    "Error getting documents.",
+//                    exception.message.toString()
+//                ))
+//            }
+//
+//    }
 
-    fun createTask(db: FirebaseFirestore, task: HashMap<String, String>): Task<DocumentReference?> {
-        return db.collection("tasks")
-            .add(task)
-            .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                updateRecyclerView(arrayOf("DocumentSnapshot added with ID: ${documentReference.id}"))
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
-                updateRecyclerView(arrayOf("Error adding document", e.message.toString()))
-            }
-    }
-
-    fun showIdeas(db: FirebaseFirestore) {
-        db.collection("ideas")
-            .get()
-            .addOnSuccessListener { result ->
-                val ideaStrings = ArrayList<String>()
-                for (document in result) {
-                    val i: Int = result.indexOf(document)
-                    recyclerViewChildren.put(i, Pair(false, document.id))
-                    ideaStrings.add("Id: " + document.id)
-                    val title = document.get("title") as String
-                    recyclerViewChildren.put(i+1, Pair(false, title))
-                    ideaStrings.add("Title: $title")
-                    val imp = document.get("implemented") as String
-                    recyclerViewChildren.put(i+2, Pair(false, imp))
-                    ideaStrings.add("Implemented: $imp")
-                    val desc = document.get("description") as String
-                    recyclerViewChildren.put(i+3, Pair(false, desc))
-                    ideaStrings.add("Description: $desc\n")
-                }
-                updateRecyclerView(ideaStrings.toTypedArray())
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents.", exception)
-                updateRecyclerView( arrayOf(
-                    "Error getting documents.",
-                    exception.message.toString()
-                ))
-            }
-    }
-
-    fun showTasks(db: FirebaseFirestore) {
-        db.collection("tasks")
-            .get()
-            .addOnSuccessListener { result ->
-                val taskStrings = ArrayList<String>()
-                for (document in result) {
-                    val i: Int = result.indexOf(document)
-                    val docId = document.id
-                    recyclerViewChildren.put(i, Pair(false, docId))
-                    taskStrings.add("Id: $docId")
-                    val title = document.get("title") as String
-                    recyclerViewChildren.put(i+1, Pair(false, title))
-                    taskStrings.add("Title: $title")
-                    val fin = document.get("finished") as String
-                    recyclerViewChildren.put(i+2, Pair(false,fin))
-                    taskStrings.add("Finished: $fin")
-                    val steps = document.get("steps") as String
-                    recyclerViewChildren.put(i+3, Pair(false, steps))
-                    taskStrings.add("Steps: $steps\n")
-                }
-
-                updateRecyclerView(taskStrings.toTypedArray())
-            }
-            .addOnFailureListener { exception ->
-                Log.w(TAG, "Error getting documents.", exception)
-                updateRecyclerView(arrayOf(
-                    "Error getting documents.",
-                    exception.message.toString()
-                ))
-            }
-
-    }
-
-    fun updateRecyclerView(messages: Array<String>) {
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
-        recyclerView.adapter = RecyclerViewAdapter(messages.toList())
+    fun initializeFirebaseFirestoreDb(){
+        FirebaseApp.initializeApp(this)
+        db = Firebase.firestore
+        auth = Firebase.auth
     }
 
     fun accessUserInformation(): ArrayList<String> {
@@ -252,19 +251,19 @@ class MainActivity : AppCompatActivity(){
         return arrayListOf("no users signed in")
     }
 
-    fun signInExistingUsers(email: String, password: String){
+    fun signInExistingFirebaseUsers(){
+        val email = getString(R.string.firestore_email)
+        val password = getString(R.string.firestore_password)
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success")
-                    val userInfoAndSignInStatus = accessUserInformation()
-                    userInfoAndSignInStatus + "\nsignInWithEmail:success"
-                    updateRecyclerView(userInfoAndSignInStatus.toTypedArray())
+                    Log.d(TAG, "Signed in to Firestore!")
+                    //updateTextRecyclerView(arrayOf("Signed in to Firestore!"))
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    updateRecyclerView(arrayOf( "Authentication failed."))
+                    Log.w(TAG, "Failed to sign in to Firestore!", task.exception)
+                   // updateTextRecyclerView(arrayOf( "Failed to sign in to Firestore!"))
                 }
             }
     }
@@ -279,7 +278,7 @@ class MainActivity : AppCompatActivity(){
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    updateRecyclerView(arrayOf("Authentication failed."))
+                    //updateTextRecyclerView(arrayOf("Authentication failed."))
                 }
             }
     }
