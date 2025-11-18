@@ -11,27 +11,28 @@ import androidx.core.graphics.toColorInt
 class TextRecyclerViewAdapter(val textList: List<String>) :
     RecyclerView.Adapter<TextRecyclerViewAdapter.TextAndOrCheckboxHolder>() {
 
-
-    // Describes an item view and its place within the RecyclerView
     class TextAndOrCheckboxHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val selectableTextLabel: TextView = itemView.findViewById(R.id.selectable_text_label)
         private val selectableText: TextView = itemView.findViewById(R.id.selectable_text)
         private val selectableTextCheckBox: CheckBox = itemView.findViewById(R.id.checkbox)
         fun bind(word: String) {
-            if(word.contains(":") ) {
-                val labelAndText = word.split(":")
-                selectableTextLabel.text = labelAndText[0]
-                selectableTextLabel.setTextColor("#008080".toColorInt())
-                selectableText.text = labelAndText[1]
-                selectableText.setTextColor("#008080".toColorInt())
-            }else if(word == "Signed in to Firestore!" || word.contains("-----")){
-                selectableTextLabel.text = word
-                selectableTextLabel.setTextColor("#008080".toColorInt())
-                selectableText.setTextColor("#008080".toColorInt())
-                selectableText.text = buildString { append("") }
-            }
-            if (word.contains("Firestore!"))
-                selectableTextCheckBox.visibility = View.GONE
+            selectableTextLabel.text = word
+            selectableText.text = ""
+            selectableTextCheckBox.visibility = View.GONE
+//            if(word.contains(":") ) {
+//                val labelAndText = word.split(":")
+//                selectableTextLabel.text = labelAndText[0]
+//                selectableTextLabel.setTextColor("#008080".toColorInt())
+//                selectableText.text = labelAndText[1]
+//                selectableText.setTextColor("#008080".toColorInt())
+//            }else if(word == "Signed in to Firestore!" || word.contains("-----")){
+//                selectableTextLabel.text = word
+//                selectableTextLabel.setTextColor("#008080".toColorInt())
+//                selectableText.setTextColor("#008080".toColorInt())
+//                selectableText.text = buildString { append("") }
+//            }
+//            if (word.contains("Firestore!"))
+//                selectableTextCheckBox.visibility = View.GONE
         }
     }
 
