@@ -14,20 +14,7 @@
     <string name="title">title</string>
     <string name="finished_date">finished date</string>
     <string name="description">description</string>
-    <!-- Add in idea names  -->
-    <string-array name="idea_array">
-        <item>Lily</item>
-        <item>Poppy</item>
-        <item>Sunflower</item>
-        <item>Freesia</item>
-        <item>Daisy</item>
-        <item>Rose</item>
-        <item>Daffodil</item>
-        <item>Lavender</item>
-        <item>Peony</item>
-        <item>Lilac</item>
-        <item>Dahlia</item>
-        <item>Tulip</item>
-        <item>Dandelion</item>
-    </string-array>
+    <string name="firestore_email">wjett18@gmail.com</string>
+    <string name="firestore_password">password</string>
+    <string name="empty" />
 </resources>

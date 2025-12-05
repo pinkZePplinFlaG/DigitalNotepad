@@ -5,15 +5,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginTop="50dp"
     android:layout_marginBottom="25dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
     android:orientation="vertical"
     android:id="@+id/main_window">
-    <include layout="@layout/show_bar"/>
+    <include layout="@layout/create_btn_bar"/>
     <include layout="@layout/text_input"/>
-    <include layout="@layout/create_bar"/>
+    <include layout="@layout/show_btn_bar"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_height="350dp"
         android:layout_width="match_parent"
+        android:layout_height="400dp"
         app:layoutManager="LinearLayoutManager" />
-    <include layout="@layout/delete_bar"/>
+    <include layout="@layout/delete_btn_bar"/>
 </LinearLayout>

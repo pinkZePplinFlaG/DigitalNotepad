@@ -52,10 +52,12 @@ class FirebaseFirestoreWrapper(private var mainContext: AppCompatActivity) {
             .addOnCompleteListener(mainContext) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "Signed in to Firestore!")
-                    updater.updateTextRecyclerView(mainContext,arrayOf("Signed in to Firestore!"))
+                    updater.updateRecyclerView(mainContext,arrayListOf(RecyclerItem("Signed in to Firestore!","","","","","")))
                 } else {
                     Log.w(TAG, "Failed to sign in to Firebase!", task.exception)
-                    updater.updateTextRecyclerView(mainContext,arrayOf( "Failed to sign in to Firebase!"))
+                    updater.updateRecyclerView(mainContext,arrayListOf(RecyclerItem("Failed to sign in to Firebase!", "","","", "", "")))
+//                    if(!email.isEmpty() && !password.isEmpty())
+//                        createNewUserWithEmailAndPassword(email, password)
                 }
             }
     }
@@ -68,14 +70,14 @@ class FirebaseFirestoreWrapper(private var mainContext: AppCompatActivity) {
 
     fun getAuth(): FirebaseAuth{ return this.auth }
 
-    fun createNewUserWithEmailAndPassword(email: String, password: String){
-        this.auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(mainContext) { task ->
-                if (task.isSuccessful) {
-                    updater.updateTextRecyclerView(mainContext,arrayOf("Successfully created new user with email: $email"))
-                } else {
-                    updater.updateTextRecyclerView(mainContext,arrayOf("Authentication failed."))
-                }
-            }
-    }
+//    fun createNewUserWithEmailAndPassword(email: String, password: String){
+//        this.auth.createUserWithEmailAndPassword(email, password)
+//            .addOnCompleteListener(mainContext) { task ->
+//                if (task.isSuccessful) {
+//                    updater.updateRecyclerView(mainContext,arrayOf("Created new user with email: $email"))
+//                } else {
+//                    updater.updateRecyclerView(mainContext,arrayOf("Authentication failed."))
+//                }
+//            }
+//    }
 }
