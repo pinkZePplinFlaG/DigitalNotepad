@@ -52,10 +52,10 @@ class FirebaseFirestoreWrapper(private var mainContext: AppCompatActivity) {
             .addOnCompleteListener(mainContext) { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "Signed in to Firestore!")
-                    updater.updateRecyclerView(mainContext,arrayListOf(RecyclerItem("Signed in to Firestore!","","","","","")))
+                    updater.updateRecyclerView(mainContext,arrayListOf(RecyclerItem(0,"","Signed in to Firestore!","","","","","")))
                 } else {
                     Log.w(TAG, "Failed to sign in to Firebase!", task.exception)
-                    updater.updateRecyclerView(mainContext,arrayListOf(RecyclerItem("Failed to sign in to Firebase!", "","","", "", "")))
+                    updater.updateRecyclerView(mainContext,arrayListOf(RecyclerItem(0,"","Failed to sign in to Firebase!", "","","", "", "")))
 //                    if(!email.isEmpty() && !password.isEmpty())
 //                        createNewUserWithEmailAndPassword(email, password)
                 }

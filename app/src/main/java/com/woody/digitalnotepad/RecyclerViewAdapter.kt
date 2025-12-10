@@ -40,21 +40,7 @@ class RecyclerViewAdapter(val itemList: ArrayList<RecyclerItem>) :
                 }
             }
         }
-//            if(word.contains(":") ) {
-//                val labelAndText = word.split(":")
-//                selectableTextLabel.text = labelAndText[0]
-//                selectableTextLabel.setTextColor("#008080".toColorInt())
-//                selectableText.text = labelAndText[1]
-//                selectableText.setTextColor("#008080".toColorInt())
-//            }else if(word == "Signed in to Firestore!" || word.contains("-----")){
-//                selectableTextLabel.text = word
-//                selectableTextLabel.setTextColor("#008080".toColorInt())
-//                selectableText.setTextColor("#008080".toColorInt())
-//                selectableText.text = buildString { append("") }
-//            }
-//            if (word.contains("Firestore!"))
-//                selectableTextCheckBox.visibility = View.GONE
-        }
+    }
 
     // Returns a new ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextAndOrCheckboxHolder {

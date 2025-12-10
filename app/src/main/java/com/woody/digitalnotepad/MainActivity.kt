@@ -1,6 +1,8 @@
 package com.woody.digitalnotepad
 
 import android.os.Bundle
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
@@ -10,23 +12,31 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var firebaseWrapper: FirebaseFirestoreWrapper
+    private lateinit var firebase: FirebaseFirestoreWrapper
     private lateinit var recUpdater: RecyclerViewUpdater
-    private lateinit var recyclerViewChildren: ArrayList<RecyclerItem>
-    private lateinit var uiUpdater: UIUpdaterFunctions
+    private lateinit var recyclerViewChildren: RecyclerViewChildren
+    private lateinit var uiUpdater: UtilityFunctions
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        firebaseWrapper = FirebaseFirestoreWrapper(this)
-        recUpdater = RecyclerViewUpdater()
-        firebaseWrapper.initializeFirebaseFirestore(recUpdater)
-        firebaseWrapper.signInExistingFirebaseUsers()
-        recyclerViewChildren = ArrayList()
-        uiUpdater = UIUpdaterFunctions(recUpdater,recyclerViewChildren, this)
+        initRecyclerView()
+        initializeFirebase()
+        initUIUpdater()
         setContentView(R.layout.activity_main)
         setButtonListeners()
     }
-
+    fun initRecyclerView(){
+        recyclerViewChildren = RecyclerViewChildren()
+        recUpdater = RecyclerViewUpdater()
+    }
+    fun initUIUpdater(){
+        uiUpdater = UtilityFunctions(recUpdater, this)
+    }
+    fun initializeFirebase(){
+        firebase = FirebaseFirestoreWrapper(this)
+        firebase.initializeFirebaseFirestore(recUpdater)
+        firebase.signInExistingFirebaseUsers()
+    }
     fun setButtonListeners() {
         val showIdeasButton: Button = findViewById(R.id.show_btn_left)
         setShowIdeasButtonListener(showIdeasButton)
@@ -40,42 +50,23 @@ class MainActivity : AppCompatActivity() {
         val createTaskButton: Button = findViewById(R.id.create_btn_right)
         setCreateTaskButtonListener(createTaskButton)
 
-        val deleteIdeaButton: Button = findViewById(R.id.delete_btn_left)
-        setDeleteIdeaButtonListener(deleteIdeaButton)
+        val deleteButton: Button = findViewById(R.id.delete_btn)
+        setDeleteButtonListener(deleteButton)
 
-        val deleteTaskButton: Button = findViewById(R.id.delete_btn_right)
-        setDeleteTaskButtonListener(deleteTaskButton)
     }
 
-    fun setDeleteIdeaButtonListener(dIB: Button){
+    fun setDeleteButtonListener(dIB: Button){
         dIB.setOnClickListener{
-            if (firebaseWrapper.userIsSignedIn()) {
+            if (firebase.userIsSignedIn()) {
                 val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
                 for(child in recyclerView.children ){
                     val linLay: LinearLayout = child as LinearLayout
                     val checkbox = linLay.findViewById<CheckBox>(R.id.checkbox)
                     if(checkbox.isChecked) {
                         val i: Int = recyclerView.children.indexOf(child)
-                        val item = recyclerViewChildren[i]
-                        uiUpdater.deleteDocument(firebaseWrapper.getDb(), "ideas", item.docId)
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    fun setDeleteTaskButtonListener(dTB: Button){
-        dTB.setOnClickListener{
-            if (firebaseWrapper.userIsSignedIn()) {
-                val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
-                for(child in recyclerView.children ){
-                    val linLay: LinearLayout = child as LinearLayout
-                    val checkbox = linLay.findViewById<CheckBox>(R.id.checkbox)
-                    if(checkbox.isChecked) {
-                        val i: Int = recyclerView.children.indexOf(child)
-                        val item = recyclerViewChildren[i]
-                        uiUpdater.deleteDocument(firebaseWrapper.getDb(), "tasks", item.docId)
+                        val item = recyclerViewChildren.getChild(i)
+                        Log.w(TAG,item.docId )
+                        uiUpdater.deleteDocument(firebase.getDb(), item.collectionPath, item.docId)
                         break;
                     }
                 }
@@ -92,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                 "implemented" to compOnTxt.text.toString(),
                 "description" to descTxt.text.toString(),
             )
-            uiUpdater.createIdea(firebaseWrapper.getDb(), idea)
+            uiUpdater.createIdea(firebase.getDb(), idea)
             titleTxt.setText("")
             compOnTxt.setText("")
             descTxt.setText("")
@@ -109,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 "finished" to compOnTxt.text.toString(),
                 "steps" to descTxt.text.toString(),
             )
-            uiUpdater.createTask(firebaseWrapper.getDb(), task)
+            uiUpdater.createTask(firebase.getDb(), task)
             titleTxt.setText("")
             compOnTxt.setText("")
             descTxt.setText("")
@@ -117,15 +108,17 @@ class MainActivity : AppCompatActivity() {
     }
     fun setShowIdeasButtonListener(sIB: Button){
         sIB.setOnClickListener {
-            if (firebaseWrapper.userIsSignedIn()) {
-                uiUpdater.showIdeas(firebaseWrapper.getDb())
+            if (firebase.userIsSignedIn()) {
+                recyclerViewChildren.clearChildren()
+                uiUpdater.showIdeas(firebase.getDb(), recyclerViewChildren)
             }
         }
     }
     fun setShowTasksButtonListener(sTB: Button){
         sTB.setOnClickListener {
-            if (firebaseWrapper.userIsSignedIn()) {
-                uiUpdater.showTasks(firebaseWrapper.getDb())
+            if (firebase.userIsSignedIn()) {
+                recyclerViewChildren.clearChildren()
+                uiUpdater.showTasks(firebase.getDb(), recyclerViewChildren)
             }
         }
     }

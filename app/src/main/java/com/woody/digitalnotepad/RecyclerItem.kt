@@ -1,6 +1,8 @@
 package com.woody.digitalnotepad
 
 data class RecyclerItem(
+    val index: Int,
+    val collectionPath: String,
     val firebaseStatus: String,
     val docId: String,
     val fireCol0: String,
